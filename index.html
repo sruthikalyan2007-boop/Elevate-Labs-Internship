@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="A premium, modern Habit Tracker to help you build good habits, maintain streaks, and achieve your goals.">
+    <title>Elevate - Modern Habit Tracker</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Login Overlay -->
+    <div id="loginOverlay" class="login-overlay active">
+        <div class="login-card glass-panel">
+            <div class="login-header">
+                <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+                <h1>Elevate</h1>
+                <p>Track your habits. Build your future.</p>
+            </div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="usernameInput">What should we call you?</label>
+                    <input type="text" id="usernameInput" placeholder="Enter your name..." required autocomplete="off"
+                        maxlength="15">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Begin Journey <i
+                        class="fa-solid fa-arrow-right"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App UI -->
+    <div id="appContainer" class="app-container hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <div class="brand-logo"><i class="fa-solid fa-leaf"></i></div>
+                <h2>Elevate</h2>
+            </div>
+
+            <div class="user-profile">
+                <div class="avatar" id="userAvatar">A</div>
+                <div class="user-info">
+                    <h3 id="userNameDisplay">User</h3>
+                    <p>Level <span id="userLevel">1</span> Explorer</p>
+                </div>
+                <button id="logoutBtn" class="icon-btn" title="Logout"><i class="fa-solid fa-sign-out-alt"></i></button>
+            </div>
+
+            <nav class="main-nav">
+                <ul>
+                    <li class="active" data-tab="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
+                    <li data-tab="calendar"><i class="fa-solid fa-calendar-days"></i> Calendar</li>
+                    <li data-tab="achievements"><i class="fa-solid fa-award"></i> Achievements</li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-stats">
+                <div class="stat-box">
+                    <i class="fa-solid fa-fire text-orange"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="longestStreakLabel">0</span>
+                        <span class="stat-label">Longest Streak</span>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fa-solid fa-check-circle text-emerald"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="completionRateLabel">0%</span>
+                        <span class="stat-label">Completion</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="app-header">
+                <div>
+                    <h1 class="greeting">Ready to crush it today?</h1>
+                    <p class="date-display" id="currentDateDisplay">Monday, March 25</p>
+                </div>
+                <button class="btn btn-primary" id="addHabitBtnTop"><i class="fa-solid fa-plus"></i> New Habit</button>
+            </header>
+
+            <!-- Dashboard Tab -->
+            <section id="tab-dashboard" class="tab-content active">
+                <div class="progress-section glass-panel">
+                    <div class="progress-header">
+                        <h3>Today's Progress</h3>
+                        <span id="progressText">0 / 0 Completed</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="dailyProgressBar" style="width: 0%;"></div>
+                    </div>
+                    <p class="progress-motivational" id="progressMotivational">Let's get started!</p>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="filters-container">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn category-health" data-filter="health">Health</button>
+                    <button class="filter-btn category-study" data-filter="study">Study</button>
+                    <button class="filter-btn category-personal" data-filter="personal">Personal</button>
+                </div>
+
+                <!-- Habit List -->
+                <div class="habit-list-container">
+                    <div id="habitList" class="habit-list">
+                        <!-- Habits dynamically injected here -->
+                    </div>
+
+                    <div id="emptyHabitsState" class="empty-state hidden">
+                        <div class="empty-icon">🌱</div>
+                        <h3>No habits found</h3>
+                        <p>You haven't added any habits for this category yet.</p>
+                        <button class="btn btn-secondary mt-3" id="emptyAddHabitBtn">Add a Habit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calendar Tab -->
+            <section id="tab-calendar" class="tab-content hidden">
+                <div class="calendar-container glass-panel">
+                    <div class="calendar-header">
+                        <button id="prevMonth"><i class="fa-solid fa-chevron-left"></i></button>
+                        <h2 id="monthYearDisplay">March 2026</h2>
+                        <button id="nextMonth"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid-header">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div class="calendar-grid" id="calendarDays">
+                        <!-- Days dynamically injected here -->
+                    </div>
+                    <div class="calendar-legend mt-4">
+                        <div class="legend-item">
+                            <div class="legend-color legend-none"></div> No habits completed
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-partial"></div> Partial completion
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-full"></div> All completed
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Achievements Tab -->
+            <section id="tab-achievements" class="tab-content hidden">
+                <div class="achievements-container glass-panel">
+                    <div class="achievements-header mb-4">
+                        <h2>Your Trophy Room</h2>
+                        <p>Complete your habits regularly to earn badges.</p>
+                    </div>
+                    <div class="badges-grid" id="badgesGrid">
+                        <!-- Badges dynamically injected here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add/Edit Habit Modal -->
+    <div id="habitModal" class="modal-overlay">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Habit</h2>
+                <button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="habitForm">
+                <input type="hidden" id="habitId">
+                <div class="input-group">
+                    <label for="habitName">Habit Name</label>
+                    <input type="text" id="habitName" required placeholder="e.g. Drink 2L Water" maxlength="30">
+                </div>
+
+                <div class="form-row">
+                    <div class="input-group half">
+                        <label for="habitEmoji">Emoji</label>
+                        <input type="text" id="habitEmoji" required placeholder="💧" maxlength="2"
+                            class="emoji-input text-center">
+                    </div>
+                    <div class="input-group half">
+                        <label for="habitCategory">Category</label>
+                        <select id="habitCategory" required>
+                            <option value="health">Health</option>
+                            <option value="study">Study</option>
+                            <option value="personal">Personal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveHabitBtn">Save Habit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMsg">Action successful</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+
+</html>
